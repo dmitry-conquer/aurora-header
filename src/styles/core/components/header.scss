@@ -12,6 +12,7 @@
   background-color: #fff;
   box-shadow: 0px 0px 35px 0px rgba(2, 6, 32, 0.2);
   font-family: "Rubik", sans-serif;
+  z-index: 9999999999999999;
 
   &__container {
     max-width: rem(1200);
@@ -84,14 +85,16 @@
   &__menu-dropdown {
     position: absolute;
     left: 0;
-    top: 100%;
+    top: calc(100% + 27px);
     background-color: #fff;
     width: 100%;
     max-width: 100%;
-    box-shadow: 0px 0px 35px 0px rgba(2, 6, 32, 0.2);
     border-radius: 0 0 rem(16) rem(16);
-    padding: rem(80) rem(40) rem(40);
-    z-index: -1;
+    border-radius: 0px 0px 16px 16px;
+    background: #fff;
+    box-shadow: 1px 3px 4px 0px rgba(0, 0, 0, 0.25);
+    padding: rem(40);
+    z-index: 999;
     opacity: 0;
     visibility: hidden;
     transition:
@@ -285,11 +288,12 @@
 }
 
 .header-overlay {
-  z-index: -1;
+  z-index: 9999999999999999;
   position: fixed;
   height: calc(100vh - var(--header-height));
   height: calc(100dvh - var(--header-height));
   width: 100%;
+  box-shadow: 0px 20px 35px 0px rgba(2, 6, 32, 0.2);
   overflow: auto;
   max-width: rem(400);
   top: var(--header-height);
@@ -314,7 +318,6 @@
 
   &__panels {
     position: relative;
-    border-left: 1px solid #ccc;
     padding: rem(24);
     width: 100%;
     height: 100%;
@@ -371,11 +374,12 @@
     column-gap: rem(32);
     align-items: center;
     color: var(--color-primary);
-    font-size: rem(12);
-    font-weight: 500;
-    line-height: 1.4;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
+    font-size: rem(12) !important;
+    font-weight: 500 !important;
+    height: auto !important;
+    line-height: 1.4 !important;
+    letter-spacing: 0.5px !important;
+    text-transform: uppercase !important;
   }
   &__panel-search {
     display: flex;
@@ -384,8 +388,10 @@
     width: 100%;
     border: 1px solid #626262;
     padding: rem(12);
+    height: rem(50);
     input {
       width: 100%;
+      height: rem(24);
     }
 
     button img {
