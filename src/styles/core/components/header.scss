@@ -104,6 +104,7 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     align-items: start;
+    column-gap: rem(48);
   }
 
   &__menu-dropdown-list {
