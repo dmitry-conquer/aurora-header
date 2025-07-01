@@ -134,8 +134,14 @@ export class Header {
     this.triggerButtonElement?.setAttribute(this.attributes.ariaExpanded, String(state));
   }
 
-  private handleInteraction = (index: number) => {
-    this.toggleSubmenu(index);
+  private handleInteraction = (index: number, event: MouseEvent) => {
+    const menuItem = this.itemHasSubmenuElements[index];
+    const isActive = menuItem.classList.contains(this.stateClasses.isActive);
+
+    if (!isActive) {
+      event.preventDefault();
+      this.toggleSubmenu(index);
+    }
   };
 
   private bindEvents(): void {
@@ -144,11 +150,9 @@ export class Header {
     this.overlayElement?.addEventListener("click", this.onOverlayClick);
     this.itemHasSubmenuElements.forEach((item, index) => {
       const link = item.querySelector(":scope > a") as HTMLAnchorElement;
-      console.log(link);
       if (!link) return;
       link.addEventListener("click", (event: MouseEvent) => {
-        event.preventDefault();
-        this.handleInteraction(index);
+        this.handleInteraction(index, event);
       });
     });
   }
