@@ -40,7 +40,7 @@ export class Header {
   }
 
   private init(): void {
-    // if (!this.isReady()) return;
+    if (!this.isReady()) return;
     this.bindEvents();
   }
 

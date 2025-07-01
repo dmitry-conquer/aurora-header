@@ -1,12 +1,16 @@
 @use "../helpers" as *;
-@import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
+// @import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
 
-.mega-header {
+.mega-header-wrapper {
+  --header-height: #{rem(80)};
   --color-primary: #273272;
   --color-gray: #626262;
+  width: 100%;
+}
+
+.mega-header {
   background-color: #fff;
   box-shadow: 0px 0px 35px 0px rgba(2, 6, 32, 0.2);
-  padding: rem(16) 0;
   font-family: "Rubik", sans-serif;
 
   &__container {
@@ -15,6 +19,7 @@
     margin: 0 auto;
     display: flex;
     align-items: center;
+    min-height: var(--header-height);
   }
 
   &__logo {
@@ -148,7 +153,6 @@
 }
 
 .nav-content {
-  background-color: var(--color-gray);
   position: absolute;
   left: 50%;
   top: 100%;
@@ -174,13 +178,11 @@
   }
   &__wrapper {
     border-radius: var(--border-radius-lg);
-    border: 1px solid #ccc;
     background-color: var(--color-white);
     padding: fluid(24, 32) fluid(24, 32) fluid(24, 32) fluid(24, 52);
     display: flex;
     justify-content: space-between;
     padding: rem(24);
-    border: none;
     @include x-large {
       padding: 0;
       flex-direction: column;
@@ -209,26 +211,39 @@
   &__list {
     display: flex;
     flex-direction: column;
-    row-gap: rem(18);
   }
   &__item {
-    font-size: rem(18);
     display: flex;
     flex-direction: column;
-    row-gap: rem(6);
-    @include x-large {
-      font-size: rem(16);
+
+    &:not(:last-child) {
+      margin-bottom: rem(52);
     }
-    a {
-      font-size: fluid(20, 24);
+
+    & > a {
+      color: var(--color-primary);
+      font-size: rem(20);
       font-weight: 500;
-      transition: color 0.3s ease;
-      @include hover {
-        color: var(--color-blue);
-      }
-      @include x-large {
-        font-size: rem(20);
-      }
+      line-height: 1.1;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    & > ul {
+      margin-top: rem(28);
+    }
+
+    & > ul li a {
+      color: var(--color-gray);
+      font-size: rem(16);
+      font-weight: 500;
+      line-height: 1.5;
+      letter-spacing: 0.5px;
+    }
+    & > ul {
+      display: flex;
+      flex-direction: column;
+      row-gap: rem(20);
     }
   }
   &__info {
@@ -270,15 +285,16 @@
 }
 
 .header-overlay {
-  z-index: 999;
+  z-index: -1;
   position: fixed;
-  height: 100vh;
-  height: 100dvh;
+  height: calc(100vh - var(--header-height));
+  height: calc(100dvh - var(--header-height));
   width: 100%;
   overflow: auto;
   max-width: rem(400);
-  top: 0;
+  top: var(--header-height);
   right: 0;
+  background-color: #fff;
   transform: translateX(100%);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   padding: 0;
@@ -298,7 +314,7 @@
 
   &__panels {
     position: relative;
-    border: 1px solid #ccc;
+    border-left: 1px solid #ccc;
     padding: rem(24);
     width: 100%;
     height: 100%;
@@ -306,7 +322,6 @@
   }
   &__panel {
     overflow: auto;
-    height: 100%;
     display: inline-block;
     position: absolute;
     top: 0;
@@ -322,6 +337,8 @@
     pointer-events: none;
     height: 100%;
     padding: rem(24);
+    padding-bottom: rem(40);
+    padding-top: 0;
 
     @include above-x-large {
       border-radius: var(--border-radius-lg);
@@ -341,20 +358,49 @@
       opacity: 0;
     }
   }
-  &__panel-back {
-    font-size: rem(14);
-    padding-bottom: rem(18);
-    margin-bottom: rem(18);
-    width: 100%;
-    border-bottom: 1px solid #8f8f8f;
-    justify-content: flex-end;
+  &__panel-head {
+    padding: rem(24) 0;
+    border-bottom: 1px solid rgba(98, 98, 98, 0.15);
+    margin-bottom: rem(24);
   }
+  &__panel-back {
+    width: 100%;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    column-gap: rem(32);
+    align-items: center;
+    color: var(--color-primary);
+    font-size: rem(12);
+    font-weight: 500;
+    line-height: 1.4;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  &__panel-search {
+    display: flex;
+    align-items: center;
+    column-gap: rem(16);
+    width: 100%;
+    border: 1px solid #626262;
+    padding: rem(12);
+    input {
+      width: 100%;
+    }
+
+    button img {
+      width: rem(24);
+      height: rem(24);
+      object-fit: contain;
+    }
+  }
+
   &__nav {
   }
   &__nav-list {
     display: flex;
     flex-direction: column;
-    row-gap: rem(22);
+    row-gap: rem(40);
   }
   &__nav-item {
   }
@@ -363,6 +409,11 @@
     justify-content: space-between;
     width: 100%;
     font-size: rem(20);
+    color: var(--color-primary);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
     &::after {
       position: static;
       transform: rotate(-90deg);
