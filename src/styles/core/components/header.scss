@@ -54,6 +54,13 @@
         visibility: visible;
       }
     }
+
+    @include hover {
+      .mega-header__menu-dropdown {
+        opacity: 1;
+        visibility: visible;
+      }
+    }
   }
 
   &__menu-link {
@@ -106,6 +113,21 @@
     grid-template-columns: repeat(2, 1fr);
     align-items: start;
     column-gap: rem(48);
+
+    &::before {
+      background-color: transparent;
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: rem(20);
+      top: 0;
+      left: 0;
+      transform: translateY(-70%);
+
+      @include x-large {
+        display: none;
+      }
+    }
   }
 
   &__menu-dropdown-list {

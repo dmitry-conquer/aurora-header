@@ -13,6 +13,7 @@ export class Header {
     isActive: "is-active",
     isLock: "is-lock",
   };
+  private readonly isTouchDevice = () => "ontouchstart" in window || navigator.maxTouchPoints > 0;
   private rootElement: HTMLElement | null;
   private overlayElement: HTMLElement | null;
   private triggerButtonElement: HTMLElement | null;
@@ -151,9 +152,12 @@ export class Header {
     this.itemHasSubmenuElements.forEach((item, index) => {
       const link = item.querySelector(":scope > a") as HTMLAnchorElement;
       if (!link) return;
-      link.addEventListener("click", (event: MouseEvent) => {
-        this.handleInteraction(index, event);
-      });
+
+      if (this.isTouchDevice()) {
+        link.addEventListener("click", (event: MouseEvent) => {
+          this.handleInteraction(index, event);
+        });
+      }
     });
   }
 }
