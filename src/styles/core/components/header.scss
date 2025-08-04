@@ -345,6 +345,10 @@ html.is-lock {
   padding: 0;
   display: none;
   will-change: transform;
+  @media (max-width: 505px) {
+    height: calc(100vh - 13rem);
+    height: calc(100dvh - 13rem);
+  }
 
   @include x-large {
     display: block;
