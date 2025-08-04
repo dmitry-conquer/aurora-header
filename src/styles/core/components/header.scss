@@ -1,5 +1,5 @@
 @use "../helpers" as *;
-// @import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
 
 html.is-lock {
   overflow: hidden;
@@ -330,8 +330,9 @@ html.is-lock {
 .header-overlay {
   z-index: 9999999999999999;
   position: absolute;
-  height: calc(100vh - var(--header-height));
-  height: calc(100dvh - var(--header-height));
+  min-height: 100%;
+  height: calc(100vh - 10rem);
+  height: calc(100dvh - 10rem);
   width: 100%;
   box-shadow: 0px 20px 35px 0px rgba(2, 6, 32, 0.2);
   overflow: auto;
