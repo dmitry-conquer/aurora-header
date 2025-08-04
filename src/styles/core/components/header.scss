@@ -1,5 +1,5 @@
 @use "../helpers" as *;
-@import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
+// @import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
 
 html.is-lock {
   overflow: hidden;
@@ -103,6 +103,10 @@ html.is-lock {
             color: #626262;
             font-size: rem(16);
             text-transform: none;
+            @include hover {
+              text-decoration: underline;
+              text-underline-offset: rem(2);
+            }
           }
         }
       }
