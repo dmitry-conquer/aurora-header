@@ -1,5 +1,5 @@
 @use "../helpers" as *;
-@import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
+// @import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
 
 html.is-lock {
   overflow: hidden;
@@ -48,10 +48,11 @@ html.is-lock {
         box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
         display: none;
         position: absolute;
+        padding-block: rem(10);
         top: calc(100% + rem(15));
         left: 0;
         background-color: #fff;
-        min-width: rem(457);
+        min-width: max-content;
         z-index: 1000;
         &::before {
           content: "";
@@ -75,12 +76,13 @@ html.is-lock {
           }
           a {
             display: block;
-            padding: rem(12) rem(24);
+            padding: rem(8) rem(24);
             color: #273272;
-            font-size: rem(20);
+            font-size: rem(14);
             font-weight: 500;
             text-transform: uppercase;
             transition: color 0.3s ease;
+            line-height: 1.3 !important;
           }
           @include hover {
             & > a,
@@ -94,14 +96,16 @@ html.is-lock {
         }
 
         ul {
+          padding-block: rem(7);
           top: 0;
           left: 100%;
           z-index: 999;
           box-shadow: rgba(149, 157, 165, 0.2) 10px 8px 24px;
           border-radius: 0 0 1rem 0;
           li a {
+            line-height: 1.3 !important;
             color: #626262;
-            font-size: rem(16);
+            font-size: rem(14);
             text-transform: none;
             @include hover {
               text-decoration: underline;
