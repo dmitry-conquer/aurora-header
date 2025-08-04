@@ -27,6 +27,7 @@
     "postcss-scss": "^4.0.9",
     "postcss-sort-media-queries": "^5.2.0",
     "prettier": "^3.6.2",
+    "rollup": "^4.46.2",
     "sass": "^1.89.2",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.35.1",
