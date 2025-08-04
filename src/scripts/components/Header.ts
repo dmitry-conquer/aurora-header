@@ -3,7 +3,6 @@ export class Header {
     root: "[data-js-header]",
     overlay: "[data-js-header-overlay]",
     triggerButton: "[data-js-header-trigger-button]",
-    itemHasSubmenu: ".has-submenu",
     panel: "[data-js-header-panel]",
   };
   private readonly attributes: Record<string, string> = {
@@ -13,11 +12,9 @@ export class Header {
     isActive: "is-active",
     isLock: "is-lock",
   };
-  private readonly isTouchDevice = () => "ontouchstart" in window || navigator.maxTouchPoints > 0;
   private rootElement: HTMLElement | null;
   private overlayElement: HTMLElement | null;
   private triggerButtonElement: HTMLElement | null;
-  private itemHasSubmenuElements: HTMLElement[];
   private toggleElements: HTMLElement[];
   private panels: HTMLElement[];
   private historyStack: string[] = ["main"];
@@ -30,9 +27,6 @@ export class Header {
       Boolean
     ) as HTMLElement[];
     this.panels = Array.from(this.rootElement?.querySelectorAll(this.selectors.panel) || []) as HTMLElement[];
-    this.itemHasSubmenuElements = Array.from(
-      this.rootElement?.querySelectorAll(this.selectors.itemHasSubmenu) || []
-    ) as HTMLElement[];
     this.init();
   }
 
@@ -52,12 +46,7 @@ export class Header {
 
   private onDocumentClick = (e: MouseEvent): void => {
     const target = e.target as HTMLElement;
-    if (
-      target.closest(this.selectors.triggerButton) ||
-      target.closest(this.selectors.overlay) ||
-      target.closest(this.selectors.itemHasSubmenu)
-    )
-      return;
+    if (target.closest(this.selectors.triggerButton) || target.closest(this.selectors.overlay)) return;
     this.setActive(false);
     this.closeAllMenus();
   };
@@ -97,29 +86,7 @@ export class Header {
     });
   }
 
-  private toggleSubmenu(currentIndex: number): void {
-    this.itemHasSubmenuElements.forEach((menuItem, index) => {
-      const subMenu = menuItem.querySelector(".mega-header__menu-dropdown") as HTMLElement;
-      if (!subMenu) return;
-      const active = menuItem.classList.contains(this.stateClasses.isActive);
-
-      if (currentIndex === index) {
-        menuItem?.classList.toggle(this.stateClasses.isActive);
-        subMenu.style.maxHeight = active ? "" : `${subMenu.scrollHeight}px`;
-      } else {
-        menuItem.classList.remove(this.stateClasses.isActive);
-        subMenu.style.maxHeight = "";
-      }
-    });
-  }
-
   private closeAllMenus(): void {
-    this.itemHasSubmenuElements.forEach(menuItem => {
-      const subMenu = menuItem.querySelector(".mega-header__menu-dropdown") as HTMLElement;
-      if (!subMenu) return;
-      menuItem?.classList.remove(this.stateClasses.isActive);
-      subMenu.style.maxHeight = "";
-    });
     this.historyStack = ["main"];
     this.showPanel("main");
     this.setActive(false);
@@ -135,30 +102,10 @@ export class Header {
     this.triggerButtonElement?.setAttribute(this.attributes.ariaExpanded, String(state));
   }
 
-  private handleInteraction = (index: number, event: MouseEvent) => {
-    const menuItem = this.itemHasSubmenuElements[index];
-    const isActive = menuItem.classList.contains(this.stateClasses.isActive);
-
-    if (!isActive) {
-      event.preventDefault();
-      this.toggleSubmenu(index);
-    }
-  };
-
   private bindEvents(): void {
     this.triggerButtonElement?.addEventListener("click", this.onButtonClick);
     document.addEventListener("click", this.onDocumentClick);
     this.overlayElement?.addEventListener("click", this.onOverlayClick);
-    this.itemHasSubmenuElements.forEach((item, index) => {
-      const link = item.querySelector(":scope > a") as HTMLAnchorElement;
-      if (!link) return;
-
-      if (this.isTouchDevice()) {
-        link.addEventListener("click", (event: MouseEvent) => {
-          this.handleInteraction(index, event);
-        });
-      }
-    });
   }
 }
 

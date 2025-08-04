@@ -1,6 +1,14 @@
 @use "../helpers" as *;
-// @import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
 
+html.is-lock {
+  overflow: hidden;
+}
+.wrapper {
+  position: relative;
+  overflow: hidden;
+  min-height: 300vh;
+}
 .mega-header-wrapper {
   --header-height: #{rem(80)};
   --color-primary: #273272;
@@ -12,7 +20,7 @@
   background-color: #fff;
   box-shadow: 0px 0px 35px 0px rgba(2, 6, 32, 0.2);
   font-family: "Rubik", sans-serif;
-  z-index: 9999999999999999;
+  z-index: 99999;
 
   &__container {
     position: relative;
@@ -34,7 +42,71 @@
   }
 
   &__menu {
-    position: relative;
+    ul {
+      ul {
+        border-radius: 0 0 1rem 1rem;
+        box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+        display: none;
+        position: absolute;
+        top: calc(100% + rem(15));
+        left: 0;
+        background-color: #fff;
+        min-width: rem(457);
+        z-index: 1000;
+        &::before {
+          content: "";
+          position: absolute;
+          width: 100%;
+          height: rem(30);
+          transform: translateY(-50%);
+          top: 0;
+          left: 0;
+          background-color: #fff;
+        }
+        & > li {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          svg {
+            position: relative;
+            right: rem(28);
+            color: #14317f;
+            transition: color 0.3s ease;
+          }
+          a {
+            display: block;
+            padding: rem(12) rem(24);
+            color: #273272;
+            font-size: rem(20);
+            font-weight: 500;
+            text-transform: uppercase;
+            transition: color 0.3s ease;
+          }
+          @include hover {
+            & > a,
+            & > svg {
+              color: #3883d0;
+            }
+            & > ul {
+              display: block;
+            }
+          }
+        }
+
+        ul {
+          top: 0;
+          left: 100%;
+          z-index: 999;
+          box-shadow: rgba(149, 157, 165, 0.2) 10px 8px 24px;
+          border-radius: 0 0 1rem 0;
+          li a {
+            color: #626262;
+            font-size: rem(16);
+            text-transform: none;
+          }
+        }
+      }
+    }
 
     @include large {
       display: none;
@@ -48,17 +120,29 @@
   }
 
   &__menu-item {
-    &.is-active {
-      .mega-header__menu-dropdown {
-        opacity: 1;
-        visibility: visible;
+    position: relative;
+    &.has-submenu {
+      display: flex;
+      align-items: center;
+      column-gap: rem(8);
+      &::after {
+        content: "";
+        background-image: url("data:image/svg+xml,%3Csvg%20width%3D%228%22%20height%3D%226%22%20viewBox%3D%220%200%208%206%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M7.25%201.25L4%204.75L0.75%201.25%22%20stroke%3D%22%2314317F%22%20stroke-width%3D%221.5%22%20stroke-linecap%3D%22round%22%20stroke-linejoin%3D%22round%22%2F%3E%3C%2Fsvg%3E");
+        width: rem(8.5);
+        height: rem(7.5);
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: contain;
+        transition: transform 0.3s ease;
       }
     }
 
     @include hover {
-      .mega-header__menu-dropdown {
-        opacity: 1;
-        visibility: visible;
+      &::after {
+        transform: rotate(-180deg);
+      }
+      & > ul {
+        display: block;
       }
     }
   }
@@ -88,87 +172,6 @@
         width: 100%;
       }
     }
-  }
-
-  &__menu-dropdown {
-    position: absolute;
-    left: 0;
-    top: calc(100% + 27px);
-    background-color: #fff;
-    width: 100%;
-    max-width: 100%;
-    border-radius: 0 0 rem(16) rem(16);
-    border-radius: 0px 0px 16px 16px;
-    background: #fff;
-    box-shadow: 1px 3px 4px 0px rgba(0, 0, 0, 0.25);
-    padding: rem(40);
-    z-index: 999;
-    opacity: 0;
-    visibility: hidden;
-    transition:
-      opacity 0.3s ease,
-      visibility 0.3s ease;
-
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    align-items: start;
-    column-gap: rem(48);
-
-    &::before {
-      background-color: transparent;
-      content: "";
-      position: absolute;
-      width: 100%;
-      height: rem(20);
-      top: 0;
-      left: 0;
-      transform: translateY(-70%);
-
-      @include x-large {
-        display: none;
-      }
-    }
-  }
-
-  &__menu-dropdown-list {
-    display: flex;
-    flex-direction: column;
-    row-gap: rem(52);
-  }
-
-  &__menu-dropdown-item {
-    flex-basis: calc(50% - 12px);
-  }
-
-  &__menu-dropdown-link {
-    color: var(--color-primary);
-    font-size: rem(20);
-    font-weight: 500;
-    line-height: 1.1;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    display: block;
-    &.has-next-sibling-list {
-      margin-bottom: rem(28);
-    }
-  }
-
-  &__menu-dropdown-sublist {
-  }
-
-  &__menu-dropdown-subitem {
-    &:not(:last-child) {
-      margin-bottom: rem(20);
-    }
-  }
-
-  &__menu-dropdown-sublink {
-    color: var(--color-gray);
-    font-size: rem(16);
-    font-weight: 500;
-    line-height: 1.5;
-    letter-spacing: 0.5px;
-    display: block;
   }
 
   &__menu-trigger {
@@ -314,8 +317,8 @@
 .header-overlay {
   z-index: 9999999999999999;
   position: absolute;
-  height: calc(100vh - 12.5rem);
-  height: calc(100dvh - 12.5rem);
+  height: calc(100vh - var(--header-height));
+  height: calc(100dvh - var(--header-height));
   width: 100%;
   box-shadow: 0px 20px 35px 0px rgba(2, 6, 32, 0.2);
   overflow: auto;
@@ -323,7 +326,7 @@
   top: 100%;
   right: 0;
   background-color: #fff;
-  transform: translateX(100%);
+  transform: translateX(150%);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   padding: 0;
   display: none;
