@@ -4,6 +4,7 @@ export class Header {
     overlay: "[data-js-header-overlay]",
     triggerButton: "[data-js-header-trigger-button]",
     panel: "[data-js-header-panel]",
+    submenuItem: ".has-submenu", // ✅ для підменю
   };
   private readonly attributes: Record<string, string> = {
     ariaExpanded: "aria-expanded",
@@ -11,6 +12,7 @@ export class Header {
   private readonly stateClasses: Record<string, string> = {
     isActive: "is-active",
     isLock: "is-lock",
+    isOpen: "is-open", // ✅ для відкритого підменю
   };
   private rootElement: HTMLElement | null;
   private overlayElement: HTMLElement | null;
@@ -18,6 +20,7 @@ export class Header {
   private toggleElements: HTMLElement[];
   private panels: HTMLElement[];
   private historyStack: string[] = ["main"];
+  private submenuItems: HTMLElement[];
 
   constructor() {
     this.rootElement = document.querySelector(this.selectors.root);
@@ -27,6 +30,9 @@ export class Header {
       Boolean
     ) as HTMLElement[];
     this.panels = Array.from(this.rootElement?.querySelectorAll(this.selectors.panel) || []) as HTMLElement[];
+    this.submenuItems = Array.from(
+      this.rootElement?.querySelectorAll(this.selectors.submenuItem) || []
+    ) as HTMLElement[];
     this.init();
   }
 
@@ -37,6 +43,7 @@ export class Header {
   private init(): void {
     if (!this.isReady()) return;
     this.bindEvents();
+    this.bindSubmenuClicks(); // ✅ новий метод
   }
 
   private onButtonClick = (): void => {
@@ -46,7 +53,12 @@ export class Header {
 
   private onDocumentClick = (e: MouseEvent): void => {
     const target = e.target as HTMLElement;
-    if (target.closest(this.selectors.triggerButton) || target.closest(this.selectors.overlay)) return;
+    if (
+      target.closest(this.selectors.triggerButton) ||
+      target.closest(this.selectors.overlay) ||
+      target.closest(this.selectors.submenuItem)
+    )
+      return;
     this.setActive(false);
     this.closeAllMenus();
   };
@@ -55,8 +67,9 @@ export class Header {
     const target = e.target as HTMLElement;
     const nextButton = target.closest(".next-panel");
     const backButton = target.closest(".prev-panel");
+
     if (nextButton) {
-      event?.preventDefault();
+      e.preventDefault();
       const id = (nextButton as HTMLElement).dataset.panel;
       if (!id) return;
       this.historyStack.push(id);
@@ -90,6 +103,7 @@ export class Header {
     this.historyStack = ["main"];
     this.showPanel("main");
     this.setActive(false);
+    this.submenuItems.forEach(item => item.classList.remove(this.stateClasses.isOpen));
   }
 
   private setActive(state: boolean): void {
@@ -106,6 +120,33 @@ export class Header {
     this.triggerButtonElement?.addEventListener("click", this.onButtonClick);
     document.addEventListener("click", this.onDocumentClick);
     this.overlayElement?.addEventListener("click", this.onOverlayClick);
+  }
+
+  /** ✅ Підтримка сенсорних пристроїв (перший клік — відкрити меню, другий — перейти) */
+  private bindSubmenuClicks(): void {
+    const isTouchDevice = "ontouchstart" in window || navigator.maxTouchPoints > 0;
+
+    if (!isTouchDevice) return; // тільки для сенсорів
+
+    this.submenuItems.forEach(item => {
+      const link = item.querySelector("a");
+
+      link?.addEventListener("click", e => {
+        if (!item.classList.contains(this.stateClasses.isOpen)) {
+          e.preventDefault();
+          this.submenuItems.forEach(el => el.classList.remove(this.stateClasses.isOpen));
+          item.classList.add(this.stateClasses.isOpen);
+        }
+        // другий клік виконає перехід автоматично
+      });
+    });
+
+    // Закриття підменю при кліку поза ним
+    document.addEventListener("click", e => {
+      if (!(e.target as HTMLElement).closest(this.selectors.submenuItem)) {
+        this.submenuItems.forEach(item => item.classList.remove(this.stateClasses.isOpen));
+      }
+    });
   }
 }
 
